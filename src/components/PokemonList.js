@@ -13,23 +13,27 @@ export default function PokemonList({ $app, initialState, handleItemClick, handl
     this.handleTypeClick = handleTypeClick;
 
     this.template = () => {
-        // html 코드는 아래와 같이 제공드립니다.
-        // 필요한 코드를 추가적으로 작성해 웹 사이트를 완성하세요.
-        `<div class="pokemon-wrapper">
-                    <div class="img-wrapper" id="${}">
-                        <img src="${}" alt="${}"></img>
-                    </div>
-                    <div class="pokemon-info">
-                        <div class="index">No.${}</div>
-                        <div class="name">${}</div>
-                        <div class="type">${}</div> 
-                    </div>
-                </div>`;
+        let temp = `<div class="pokemon-wrapper">`;
+        if(this.state) {
+            this.state.forEach((elm) => {
+                temp +=`
+                        <div class="img-wrapper" id=${elm.id}>
+                            <img src=${elm.img}></img>
+                        </div>
+                        <div class="pokemon-info">
+                            <div class="index">No.${elm.id}</div>
+                            <div class="name">${elm.name}</div>
+                            <div class="type">${elm.type}</div> 
+                        </div>
+                `
+            });
+            temp += `</div>`;
+        }
+        return temp;
     };
 
     this.render = () => {
         this.$target.innerHTML = this.template();
-
     };
 
     this.setState = (newState) => {
