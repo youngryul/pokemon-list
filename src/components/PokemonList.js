@@ -13,21 +13,22 @@ export default function PokemonList({ $app, initialState, handleItemClick, handl
     this.handleTypeClick = handleTypeClick;
 
     this.template = () => {
-        let temp = `<div class="pokemon-wrapper">`;
+        let temp = []
         if(this.state) {
             this.state.forEach((elm) => {
                 temp +=`
-                        <div class="img-wrapper" id=${elm.id}>
-                            <img src=${elm.img}></img>
-                        </div>
-                        <div class="pokemon-info">
-                            <div class="index">No.${elm.id}</div>
-                            <div class="name">${elm.name}</div>
-                            <div class="type">${elm.type}</div> 
+                        <div class="pokemon-wrapper">
+                             <div class="img-wrapper" id=${elm.id}>
+                                <img src=${elm.img}></img>
+                            </div>
+                            <div class="pokemon-info">
+                                <div class="index">No.${elm.id}</div>
+                                <div class="name">${elm.name}</div>
+                                <div class="type">${elm.type}</div> 
+                            </div>
                         </div>
                 `
             });
-            temp += `</div>`;
         }
         return temp;
     };
