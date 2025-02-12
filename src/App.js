@@ -2,8 +2,9 @@
 import PokemonList from './components/PokemonList.js';
 
 //APIS
-import { getPokemonList } from './modules/api.js';
+import {getPokemonDetail, getPokemonList} from './modules/api.js';
 import Header from "./components/Header.js";
+import PokemonDetail from "./components/PokemonDetail.js";
 
 export default function App($app) {
     const getSearchWord = () => {
@@ -20,33 +21,35 @@ export default function App($app) {
         currentPage: window.location.pathname,
     };
 
-    const header = new Header({
-        $app,
-        initialState: {
-            currentPage: this.state.currentPage,
-            searchWord: this.state.searchWord
-        },
-        handleSearch: async (searchWord) => {
-            history.pushState(null, null, `/pokemon-list/index.html/${this.state.type}?search=${searchWord}`);
-            const pokemonList = await getPokemonList(this.state.type, searchWord);
-            this.setState({
-                ...this.state,
-                pokemonList: pokemonList,
-                searchWord: searchWord
-            })
+    const header = () =>{
+         new Header({
+            $app,
+            initialState: {
+                currentPage: this.state.currentPage,
+                searchWord: this.state.searchWord
+            },
+            handleSearch: async (searchWord) => {
+                history.pushState(null, null, `/pokemon-list/index.html/${this.state.type}?search=${searchWord}`);
+                const pokemonList = await getPokemonList(this.state.type, searchWord);
+                this.setState({
+                    ...this.state,
+                    pokemonList: pokemonList,
+                    searchWord: searchWord
+                })
 
-        }
+            }
 
-    })
+        })
+    }
 
     const pokemonList = new PokemonList({
         $app,
         initialState: this.state.pokemonList,
         handleItemClick: async (id) => {
-            history.pushState(null, null, `/detail/${id}`);
+            history.pushState(null, null, `/pokemon-list/index.html/detail/${id}`);
             this.setState({
                 ...this.state,
-                currentPage: `/detail/${id}`,
+                currentPage: `/pokemon-list/index.html/detail/${id}`,
             })
         },
 
@@ -59,19 +62,52 @@ export default function App($app) {
         },
     });
 
+    const pokemonDetail = async (id)=> {
+        try {
+            const pokemonDetailData = await getPokemonDetail(id);
+            new PokemonDetail({$app, initialState: pokemonDetailData});
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     this.setState = (newState) => {
         this.state = newState;
-        pokemonList.setState(this.state.pokemonList)
+        const path = this.state.currentPage;
+
+
+        if (path.startsWith('/pokemon-list/index.html/detail/')){
+            $app.innerHTML = '';
+
+            const detailId = path.split('/pokemon-list/index.html/detail/')[1]
+            header();
+            pokemonDetail(detailId);
+        }
+        else {
+            pokemonList.setState(this.state.pokemonList)
+        }
     };
 
     const init = async () => {
        const path = this.state.currentPage;
-       const searchWord = getSearchWord();
-       const pokemonList = await getPokemonList(this.state.type, searchWord);
-       this.setState({
-           ...this.state,
-           pokemonList: pokemonList
-       })
+
+       header();
+
+       if(!path.startsWith('/pokemon-list/index.html/detail/')){
+           const searchWord = getSearchWord();
+           const pokemonList = await getPokemonList(this.state.type, searchWord);
+           this.setState({
+               ...this.state,
+               pokemonList: pokemonList
+           })
+       }
+       else {
+           const detailId = path.split('/pokemon-list/index.html/detail/')[1]
+
+           pokemonDetail(detailId);
+       }
+
     };
 
     window.addEventListener('popstate', async () => {

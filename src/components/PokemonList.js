@@ -24,7 +24,7 @@ export default function PokemonList({ $app, initialState, handleItemClick, handl
                             <div class="pokemon-info">
                                 <div class="index">No.${elm.id}</div>
                                 <div class="name">${elm.name}</div>
-                                <div class="type">${elm.type}</div> 
+                                <div class="type">${setPokemonType(elm.type)}</div> 
                             </div>
                         </div>
                 `
@@ -35,6 +35,11 @@ export default function PokemonList({ $app, initialState, handleItemClick, handl
 
     this.render = () => {
         this.$target.innerHTML = this.template();
+        this.$target.querySelectorAll('div.img-wrapper').forEach((elm)=> {
+            elm.addEventListener('click', () => {
+                this.handleItemClick(elm.id);
+            })
+        })
     };
 
     this.setState = (newState) => {

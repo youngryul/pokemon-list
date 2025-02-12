@@ -26,13 +26,17 @@
 
 body {
     padding: 0;
-    margin: 0;
+    margin-top: 100px;
     background-color: rgb(250, 250, 250);
 }
 
 /* HEADER */
 .header {
-    padding: 60px 125px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 40px 125px;
     font-size: var(--large);
     font-weight: bold;
     color: white;
@@ -154,7 +158,7 @@ body {
 
 /* POKEMON DETAIL */
 .pokemon-detail {
-    height: calc(100vh - 160px);
+    height: calc(100vh - 100px);
     padding: 0 8%;
     background-image: url(./img/background.jpeg);
     display: flex;

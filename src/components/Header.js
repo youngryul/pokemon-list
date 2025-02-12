@@ -1,6 +1,5 @@
 export default function Header({ $app, initialState, handleSearch }) {
     this.state = initialState;
-    console.log("state", this.state)
     this.$target = document.createElement('div');
     this.$target.className = 'header';
 
@@ -9,7 +8,6 @@ export default function Header({ $app, initialState, handleSearch }) {
 
     this.template = () => {
         const { currentPage, searchWord } = this.state;
-        console.log("searchWord!", searchWord)
         let temp = `
                            <div class="header-content">
                               <img src="/src/img/ball.webp" />
